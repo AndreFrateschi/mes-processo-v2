@@ -7,8 +7,8 @@
   const mesText = text => String(text).replace(/MES/g, '<span class="mes-accent">MES</span>');
 
   function isLogged() { return sessionStorage.getItem(SESSION_KEY) === "active"; }
-  function guard() { if (!isLogged()) location.replace("login.html"); }
-  function logout() { sessionStorage.removeItem(SESSION_KEY); location.replace("login.html"); }
+  function guard() { if (!isLogged()) location.replace("./"); }
+  function logout() { sessionStorage.removeItem(SESSION_KEY); location.replace("./"); }
   function statusLabel(status) { return { done: "Concluído", evolving: "Em evolução", planned: "Planejado", attention: "Atenção" }[status] || status; }
   function counts(objectives) {
     return objectives.reduce((acc, item) => { acc.total++; acc[item.status] = (acc[item.status] || 0) + 1; return acc; }, { total: 0, done: 0, evolving: 0, planned: 0, attention: 0 });
