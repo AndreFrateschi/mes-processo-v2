@@ -17,6 +17,7 @@
     return objectives.reduce((acc, item) => { acc.total++; acc[item.status] = (acc[item.status] || 0) + 1; return acc; }, { total: 0, done: 0, evolving: 0, planned: 0, attention: 0 });
   }
   function recalculateProgress() {
+    if (!data || !data.stages) return;
     Object.values(data.stages).forEach(stage => { stage.progress = stage.objectives.length ? Math.round(stage.objectives.reduce((sum, item) => sum + (Number(item.progress) || 0), 0) / stage.objectives.length) : 0; });
     const stages = Object.values(data.stages);
     data.settings.programProgress = stages.length ? Math.round(stages.reduce((sum, stage) => sum + stage.progress, 0) / stages.length) : 0;
