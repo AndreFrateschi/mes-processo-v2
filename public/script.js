@@ -16,6 +16,12 @@
   function counts(objectives) {
     return objectives.reduce((acc, item) => { acc.total++; acc[item.status] = (acc[item.status] || 0) + 1; return acc; }, { total: 0, done: 0, evolving: 0, planned: 0, attention: 0 });
   }
+  function recalculateProgress() {
+    Object.values(data.stages).forEach(stage => { stage.progress = stage.objectives.length ? Math.round(stage.objectives.reduce((sum, item) => sum + (Number(item.progress) || 0), 0) / stage.objectives.length) : 0; });
+    const stages = Object.values(data.stages);
+    data.settings.programProgress = stages.length ? Math.round(stages.reduce((sum, stage) => sum + stage.progress, 0) / stages.length) : 0;
+  }
+  recalculateProgress();
   function animateNumber(el, target, suffix = "%") {
     const start = performance.now(), duration = 900;
     const tick = now => { const p = Math.min(1, (now - start) / duration); el.textContent = `${Math.round(target * (1 - Math.pow(1 - p, 3)))}${suffix}`; if (p < 1) requestAnimationFrame(tick); };
@@ -93,7 +99,8 @@
     let currentFilter = "all";
     const editor = $("#objective-editor");
     function updateKpis() { const c = counts(stage.objectives); $("#stage-kpis").innerHTML = `<span><small>Total</small><b>${c.total}</b></span><span><small>Concluídos</small><b>${c.done}</b></span><span><small>Em evolução</small><b>${c.evolving}</b></span><span><small>Planejados</small><b>${c.planned}</b></span><span><small>Evolução geral</small><b>${stage.progress}%</b></span>`; }
-    function persist() { localStorage.setItem(CONTENT_KEY, JSON.stringify(data)); updateKpis(); renderObjectives(currentFilter); }
+    function refreshStageProgress() { recalculateProgress(); $("#stage-percent").textContent = `${stage.progress}%`; $("#stage-bar").style.width = `${stage.progress}%`; $("#progress-ring").style.setProperty("--progress", `${stage.progress * 3.6}deg`); }
+    function persist() { refreshStageProgress(); localStorage.setItem(CONTENT_KEY, JSON.stringify(data)); updateKpis(); renderObjectives(currentFilter); }
     function renderObjectives(filter = currentFilter) {
       currentFilter = filter;
       const items = stage.objectives.filter(item => filter === "all" || item.status === filter);
