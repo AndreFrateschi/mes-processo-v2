@@ -1,10 +1,13 @@
 (function () {
   const SESSION_KEY = "mes-yamaha-demo-session";
   const page = document.body.dataset.page;
-  const data = window.MES_DATA;
+  const CONTENT_KEY = "mes-yamaha-content-v1";
+  let data = window.MES_DATA;
+  try { const draft = localStorage.getItem(CONTENT_KEY); if (draft) data = JSON.parse(draft); } catch (_) { localStorage.removeItem(CONTENT_KEY); }
   const $ = (selector, root = document) => root.querySelector(selector);
   const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
   const mesText = text => String(text).replace(/MES/g, '<span class="mes-accent">MES</span>');
+  const safe = value => String(value ?? "").replace(/[&<>"']/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[char]));
 
   function isLogged() { return sessionStorage.getItem(SESSION_KEY) === "active"; }
   function guard() { if (!isLogged()) location.replace("./"); }
@@ -87,14 +90,44 @@
     $("#mes-relation").innerHTML = mesText(stage.mesRelation);
     animateNumber($("#stage-percent"), stage.progress);
     requestAnimationFrame(() => { $("#stage-bar").style.width = `${stage.progress}%`; $("#progress-ring").style.setProperty("--progress", `${stage.progress * 3.6}deg`); });
-    const c = counts(stage.objectives);
-    $("#stage-kpis").innerHTML = `<span><small>Total</small><b>${c.total}</b></span><span><small>Concluídos</small><b>${c.done}</b></span><span><small>Em evolução</small><b>${c.evolving}</b></span><span><small>Planejados</small><b>${c.planned}</b></span><span><small>Evolução geral</small><b>${stage.progress}%</b></span>`;
-
-    function renderObjectives(filter = "all") {
+    let currentFilter = "all";
+    const editor = $("#objective-editor");
+    function updateKpis() { const c = counts(stage.objectives); $("#stage-kpis").innerHTML = `<span><small>Total</small><b>${c.total}</b></span><span><small>Concluídos</small><b>${c.done}</b></span><span><small>Em evolução</small><b>${c.evolving}</b></span><span><small>Planejados</small><b>${c.planned}</b></span><span><small>Evolução geral</small><b>${stage.progress}%</b></span>`; }
+    function persist() { localStorage.setItem(CONTENT_KEY, JSON.stringify(data)); updateKpis(); renderObjectives(currentFilter); }
+    function renderObjectives(filter = currentFilter) {
+      currentFilter = filter;
       const items = stage.objectives.filter(item => filter === "all" || item.status === filter);
-      $("#objectives-grid").innerHTML = items.map(item => `<article class="objective-card status-${item.status}"><header><span>OBJETIVO 0${item.id}</span><b class="status-badge"><i></i>${statusLabel(item.status)}</b></header><h2>${item.name}</h2><p>${item.description}</p><div class="objective-progress"><span><i style="width:${item.progress}%"></i></span><b>${item.progress}%</b></div><div class="deliveries">${item.deliveries.map(d => `<span>${d}</span>`).join("")}</div><footer><div><small>PRÓXIMO PASSO</small><b>${item.nextStep}</b></div><div><small>RESPONSÁVEL</small><b>${item.owner}</b></div></footer>${item.preliminary ? '<em>Validar com PO</em>' : ""}</article>`).join("") || '<p class="empty-state">Nenhum objetivo neste filtro.</p>';
+      $("#objectives-grid").innerHTML = items.map(item => `<article class="objective-card status-${safe(item.status)}"><header><span>OBJETIVO ${String(item.id).padStart(2,"0")}</span><b class="status-badge"><i></i>${statusLabel(item.status)}</b></header><button class="edit-card" data-edit-id="${item.id}">Editar</button><h2>${safe(item.name)}</h2><p>${safe(item.description)}</p><div class="objective-progress"><span><i style="width:${Number(item.progress) || 0}%"></i></span><b>${Number(item.progress) || 0}%</b></div><div class="deliveries">${item.deliveries.map(d => `<span>${safe(d)}</span>`).join("")}</div><footer><div><small>PRÓXIMO PASSO</small><b>${safe(item.nextStep)}</b></div><div><small>RESPONSÁVEL</small><b>${safe(item.owner)}</b></div></footer>${item.preliminary ? '<em>Validar com PO</em>' : ""}</article>`).join("") || '<p class="empty-state">Nenhum objetivo neste filtro.</p>';
+      $$('[data-edit-id]').forEach(button => button.addEventListener("click", () => openEditor(stage.objectives.find(item => item.id === Number(button.dataset.editId)))));
     }
-    renderObjectives();
+    function openEditor(item) {
+      const isNew = !item;
+      const objective = item || { id: "", name: "", description: "", status: "planned", progress: 0, deliveries: [], nextStep: "", owner: "A definir", preliminary: true };
+      $("#editor-stage").textContent = stage.shortTitle;
+      $("#editor-title").textContent = isNew ? "Criar novo objetivo" : "Editar objetivo";
+      $("#objective-id").value = objective.id;
+      $("#objective-name").value = objective.name;
+      $("#objective-description").value = objective.description;
+      $("#objective-status").value = objective.status;
+      $("#objective-progress").value = objective.progress;
+      $("#objective-deliveries").value = objective.deliveries.join(", ");
+      $("#objective-next-step").value = objective.nextStep;
+      $("#objective-owner").value = objective.owner;
+      $("#objective-preliminary").checked = objective.preliminary;
+      $("#delete-objective").hidden = isNew;
+      $("#duplicate-objective").hidden = isNew;
+      $("#editor-message").textContent = "";
+      editor.showModal();
+    }
+    function formObjective(id) { return { id, name: $("#objective-name").value.trim(), description: $("#objective-description").value.trim(), status: $("#objective-status").value, progress: Math.max(0, Math.min(100, Number($("#objective-progress").value) || 0)), deliveries: $("#objective-deliveries").value.split(",").map(v => v.trim()).filter(Boolean), nextStep: $("#objective-next-step").value.trim(), owner: $("#objective-owner").value.trim() || "A definir", preliminary: $("#objective-preliminary").checked }; }
+    $("#objective-form").addEventListener("submit", event => { event.preventDefault(); const existingId = Number($("#objective-id").value); if (existingId) { const index = stage.objectives.findIndex(item => item.id === existingId); stage.objectives[index] = formObjective(existingId); } else { const id = Math.max(0, ...stage.objectives.map(item => item.id)) + 1; stage.objectives.push(formObjective(id)); } persist(); editor.close(); });
+    $("#delete-objective").addEventListener("click", () => { const id = Number($("#objective-id").value); if (id && confirm("Excluir este objetivo?")) { stage.objectives = stage.objectives.filter(item => item.id !== id); persist(); editor.close(); } });
+    $("#duplicate-objective").addEventListener("click", () => { const id = Math.max(0, ...stage.objectives.map(item => item.id)) + 1; const copy = formObjective(id); copy.name += " (cópia)"; stage.objectives.push(copy); persist(); editor.close(); });
+    $("#close-editor").addEventListener("click", () => editor.close());
+    $("#new-objective").addEventListener("click", () => openEditor());
+    $("#export-data").addEventListener("click", () => { const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" }); const url = URL.createObjectURL(blob); const link = document.createElement("a"); link.href = url; link.download = "mes-yamaha-data.json"; link.click(); URL.revokeObjectURL(url); });
+    $("#import-data").addEventListener("change", event => { const file = event.target.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = () => { try { const imported = JSON.parse(reader.result); if (!imported.stages) throw new Error(); localStorage.setItem(CONTENT_KEY, JSON.stringify(imported)); location.reload(); } catch (_) { alert("Arquivo inválido. Selecione um JSON exportado por esta página."); } }; reader.readAsText(file); });
+    updateKpis(); renderObjectives();
     $$('[data-filter]').forEach(button => button.addEventListener("click", () => { $$('[data-filter]').forEach(b => b.classList.remove("active")); button.classList.add("active"); renderObjectives(button.dataset.filter); }));
   }
 })();

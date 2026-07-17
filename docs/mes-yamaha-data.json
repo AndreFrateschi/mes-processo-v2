@@ -1,0 +1,424 @@
+{
+  "settings": {
+    "planningLabel": "PCP",
+    "planningAlternative": "PCPM",
+    "mesColor": "#2C2CFE",
+    "progressColor": "#00D394",
+    "programProgress": 68,
+    "preliminaryNote": "Conteúdo preliminar — validar com Product Owner"
+  },
+  "program": {
+    "title": "Programa MES Yamaha",
+    "tagline": "Da ordem de produção à execução na fábrica.",
+    "concept": "Da ordem de produção à montagem final.",
+    "mainText": "O PCP define o plano. O MES coordena a execução, a automação conecta as linhas de produção e o realizado retorna para novas decisões.",
+    "message": "O programa iniciou sua evolução pela automação e agora amplia sua atuação para conectar planejamento, execução e gestão de ponta a ponta.",
+    "timeline": [
+      "Início pela automação",
+      "Gestão de Linha e monitoramento",
+      "ANDON e visibilidade operacional",
+      "Integrações PLC · IHM → DDC",
+      "Expansão para planejamento e PCP",
+      "Visão completa do MES",
+      "Próximas evoluções"
+    ]
+  },
+  "stages": {
+    "source": {
+      "order": 1,
+      "category": "Origem",
+      "shortTitle": "Pymac / futuro SAP",
+      "cardTitle": "Pymac / SAP",
+      "subtitle": "Demanda, ordens e dados mestres",
+      "progress": 72,
+      "purpose": "Originar a ordem de produção e disponibilizar os dados mestres que alimentam o planejamento e a jornada completa do MES.",
+      "mesRelation": "É o ponto de nascimento da informação produtiva, garantindo que produto, modelo e ordem cheguem de forma confiável ao planejamento.",
+      "objectives": [
+        {
+          "id": 1,
+          "name": "Originação da ordem de produção",
+          "description": "Gerar e disponibilizar ordens produtivas para o planejamento.",
+          "status": "done",
+          "progress": 100,
+          "deliveries": [
+            "Ordens",
+            "Demanda"
+          ],
+          "nextStep": "Consolidar regras de integração",
+          "owner": "A definir",
+          "preliminary": true
+        },
+        {
+          "id": 2,
+          "name": "Dados mestres",
+          "description": "Disponibilizar modelos, produtos e parâmetros produtivos.",
+          "status": "evolving",
+          "progress": 75,
+          "deliveries": [
+            "Modelos",
+            "Produtos",
+            "Parâmetros"
+          ],
+          "nextStep": "Validar cobertura com PO",
+          "owner": "A definir",
+          "preliminary": true
+        },
+        {
+          "id": 3,
+          "name": "Integração com planejamento",
+          "description": "Enviar informações consistentes para PCP/PCPM.",
+          "status": "evolving",
+          "progress": 65,
+          "deliveries": [
+            "Interface Pymac",
+            "Plano"
+          ],
+          "nextStep": "Mapear exceções",
+          "owner": "A definir",
+          "preliminary": true
+        },
+        {
+          "id": 4,
+          "name": "Evolução futura para SAP",
+          "description": "Preparar a transição futura mantendo continuidade operacional.",
+          "status": "planned",
+          "progress": 20,
+          "deliveries": [
+            "Roadmap SAP"
+          ],
+          "nextStep": "Definir arquitetura-alvo",
+          "owner": "A definir",
+          "preliminary": true
+        }
+      ]
+    },
+    "pcp": {
+      "order": 2,
+      "category": "Planejamento",
+      "shortTitle": "PCP / PCPM",
+      "cardTitle": "PCP",
+      "subtitle": "Plano, sequência e decisões",
+      "progress": 55,
+      "purpose": "Construir o plano de produção e decidir sequência, mix, balanceamento e replanejamento respeitando a janela congelada.",
+      "mesRelation": "Conecta a intenção produtiva à execução real e utiliza o retorno da fábrica para orientar novas decisões.",
+      "objectives": [
+        {
+          "id": 1,
+          "name": "Plano de produção",
+          "description": "Construir e liberar o plano que orienta a execução.",
+          "status": "evolving",
+          "progress": 70,
+          "deliveries": [
+            "Plano",
+            "Capacidade"
+          ],
+          "nextStep": "Validar nomenclatura PCP/PCPM",
+          "owner": "A definir",
+          "preliminary": true
+        },
+        {
+          "id": 2,
+          "name": "Sequenciamento e balanceamento",
+          "description": "Apoiar mix, cores e sequência com APS/Balance.",
+          "status": "evolving",
+          "progress": 60,
+          "deliveries": [
+            "APS/Balance",
+            "Mix",
+            "Cores"
+          ],
+          "nextStep": "Detalhar regras",
+          "owner": "A definir",
+          "preliminary": true
+        },
+        {
+          "id": 3,
+          "name": "Janela congelada",
+          "description": "Manter três dias congelados e replanejar a partir do quarto.",
+          "status": "done",
+          "progress": 100,
+          "deliveries": [
+            "3 dias",
+            "Replanejamento"
+          ],
+          "nextStep": "Formalizar governança",
+          "owner": "A definir",
+          "preliminary": true
+        },
+        {
+          "id": 4,
+          "name": "Integração com MES",
+          "description": "Enviar plano e receber realizado, paradas e aderência.",
+          "status": "planned",
+          "progress": 25,
+          "deliveries": [
+            "Plano × realizado"
+          ],
+          "nextStep": "Definir contrato de dados",
+          "owner": "A definir",
+          "preliminary": true
+        }
+      ]
+    },
+    "mes": {
+      "order": 3,
+      "category": "Gestão da execução",
+      "shortTitle": "MES",
+      "cardTitle": "MES",
+      "subtitle": "Coordenação e gestão ponta a ponta",
+      "progress": 80,
+      "purpose": "Coordenar a execução, transformar sinais da fábrica em gestão e conectar planejamento, automação, qualidade e rastreabilidade.",
+      "mesRelation": "É o núcleo integrador da jornada: recebe o plano, acompanha a execução e devolve informações confiáveis para novas decisões.",
+      "objectives": [
+        {
+          "id": 1,
+          "name": "Visibilidade da execução em tempo real",
+          "description": "Disponibilizar uma visão online da produção, status das linhas, paradas e aderência ao planejamento.",
+          "status": "done",
+          "progress": 100,
+          "deliveries": [
+            "Gestão de Linha",
+            "ANDON",
+            "Segundo ANDON",
+            "Monitoramento da execução"
+          ],
+          "nextStep": "Consolidar indicadores executivos",
+          "owner": "A definir",
+          "preliminary": true
+        },
+        {
+          "id": 2,
+          "name": "Integração com a automação",
+          "description": "Capturar eventos da fábrica por meio de PLC, IHM e DDC, transformando sinais de máquina em informações para gestão.",
+          "status": "done",
+          "progress": 100,
+          "deliveries": [
+            "PLC",
+            "IHM",
+            "DDC",
+            "Liberação de ciclo",
+            "Intertravamento",
+            "Coleta de eventos"
+          ],
+          "nextStep": "Expandir cobertura das linhas",
+          "owner": "A definir",
+          "preliminary": true
+        },
+        {
+          "id": 3,
+          "name": "Gestão operacional da linha",
+          "description": "Dar suporte à operação na identificação de perdas, paradas, desvios e produzido versus programado.",
+          "status": "done",
+          "progress": 100,
+          "deliveries": [
+            "GL",
+            "ANDON",
+            "Monitoramento ABS",
+            "Apontamentos de produção"
+          ],
+          "nextStep": "Aprimorar análise de perdas",
+          "owner": "A definir",
+          "preliminary": true
+        },
+        {
+          "id": 4,
+          "name": "Integração com planejamento e PCP",
+          "description": "Conectar o plano de produção à execução, permitindo acompanhar sequência, aderência e necessidade de replanejamento.",
+          "status": "evolving",
+          "progress": 55,
+          "deliveries": [
+            "Integração com PCP/PCPM",
+            "Plano de produção",
+            "Sequenciamento",
+            "APS/Balance",
+            "Janela congelada de três dias"
+          ],
+          "nextStep": "Validar processo ponta a ponta",
+          "owner": "A definir",
+          "preliminary": true
+        },
+        {
+          "id": 5,
+          "name": "Qualidade e rastreabilidade",
+          "description": "Conectar os eventos de produção aos dados de qualidade e rastreabilidade, permitindo uma visão integrada do produto e do processo.",
+          "status": "evolving",
+          "progress": 45,
+          "deliveries": [
+            "Qualidade",
+            "Inspeções",
+            "Rastreabilidade",
+            "Histórico produtivo"
+          ],
+          "nextStep": "Definir dados prioritários",
+          "owner": "A definir",
+          "preliminary": true
+        }
+      ]
+    },
+    "automation": {
+      "order": 4,
+      "category": "Automação",
+      "shortTitle": "Automação",
+      "cardTitle": "PLC · IHM → DDC",
+      "subtitle": "Sinais, ações e coleta",
+      "progress": 88,
+      "purpose": "Detectar eventos, permitir ações operacionais e disponibilizar dados confiáveis das linhas para o MES.",
+      "mesRelation": "Foi o ponto de partida do programa e permanece como a camada que conecta máquinas e operação à gestão integrada.",
+      "objectives": [
+        {
+          "id": 1,
+          "name": "Captura via PLC",
+          "description": "Detectar eventos e sinais relevantes da produção.",
+          "status": "done",
+          "progress": 100,
+          "deliveries": [
+            "PLC",
+            "Sensores"
+          ],
+          "nextStep": "Expandir padronização",
+          "owner": "A definir",
+          "preliminary": true
+        },
+        {
+          "id": 2,
+          "name": "Ações via IHM",
+          "description": "Permitir liberação de ciclos e ações operacionais controladas.",
+          "status": "done",
+          "progress": 100,
+          "deliveries": [
+            "IHM",
+            "Ciclos"
+          ],
+          "nextStep": "Revisar experiência operacional",
+          "owner": "A definir",
+          "preliminary": true
+        },
+        {
+          "id": 3,
+          "name": "Coleta via DDC",
+          "description": "Coletar e disponibilizar sinais para o MES.",
+          "status": "done",
+          "progress": 100,
+          "deliveries": [
+            "DDC",
+            "Eventos"
+          ],
+          "nextStep": "Ampliar cobertura",
+          "owner": "A definir",
+          "preliminary": true
+        },
+        {
+          "id": 4,
+          "name": "Intertravamento e ABS",
+          "description": "Apoiar segurança operacional e monitoramento ABS.",
+          "status": "evolving",
+          "progress": 70,
+          "deliveries": [
+            "Intertravamento",
+            "ABS"
+          ],
+          "nextStep": "Validar escopo futuro",
+          "owner": "A definir",
+          "preliminary": true
+        },
+        {
+          "id": 5,
+          "name": "Integração de todas as linhas",
+          "description": "Conectar as linhas de produção à visão completa do MES.",
+          "status": "evolving",
+          "progress": 68,
+          "deliveries": [
+            "Linhas",
+            "MES"
+          ],
+          "nextStep": "Planejar ondas de expansão",
+          "owner": "A definir",
+          "preliminary": true
+        }
+      ]
+    },
+    "line": {
+      "order": 5,
+      "category": "Execução",
+      "shortTitle": "Linhas de produção / montagem final",
+      "cardTitle": "Linhas de produção",
+      "subtitle": "Produzir, registrar e apontar",
+      "progress": 62,
+      "purpose": "Executar as ordens de produção e registrar o realizado, paradas, qualidade e aderência até a montagem final.",
+      "mesRelation": "É onde plano, pessoas, máquinas e produto se encontram; o realizado retorna ao MES e ao planejamento para novas decisões.",
+      "objectives": [
+        {
+          "id": 1,
+          "name": "Execução das ordens",
+          "description": "Executar a sequência liberada para cada linha.",
+          "status": "done",
+          "progress": 100,
+          "deliveries": [
+            "Ordens",
+            "Sequência"
+          ],
+          "nextStep": "Validar aderência",
+          "owner": "A definir",
+          "preliminary": true
+        },
+        {
+          "id": 2,
+          "name": "Operador, máquina e posto",
+          "description": "Associar recursos e contexto da execução.",
+          "status": "evolving",
+          "progress": 60,
+          "deliveries": [
+            "Operador",
+            "Máquina",
+            "Posto"
+          ],
+          "nextStep": "Detalhar rastreabilidade",
+          "owner": "A definir",
+          "preliminary": true
+        },
+        {
+          "id": 3,
+          "name": "Produção e paradas",
+          "description": "Registrar produção realizada e motivos de parada.",
+          "status": "evolving",
+          "progress": 70,
+          "deliveries": [
+            "Produção",
+            "Paradas"
+          ],
+          "nextStep": "Padronizar apontamentos",
+          "owner": "A definir",
+          "preliminary": true
+        },
+        {
+          "id": 4,
+          "name": "Qualidade",
+          "description": "Integrar inspeções e eventos de qualidade.",
+          "status": "planned",
+          "progress": 30,
+          "deliveries": [
+            "Inspeções",
+            "Desvios"
+          ],
+          "nextStep": "Definir escopo com Qualidade",
+          "owner": "A definir",
+          "preliminary": true
+        },
+        {
+          "id": 5,
+          "name": "Retorno do realizado",
+          "description": "Disponibilizar produzido versus programado para novas decisões.",
+          "status": "evolving",
+          "progress": 50,
+          "deliveries": [
+            "Realizado",
+            "Aderência"
+          ],
+          "nextStep": "Conectar ao PCP/PCPM",
+          "owner": "A definir",
+          "preliminary": true
+        }
+      ]
+    }
+  }
+}
